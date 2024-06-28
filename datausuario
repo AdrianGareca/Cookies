@@ -1,0 +1,56 @@
+usuarios = []
+
+class Usuario:
+    def __init__(self, nombre,apellido,login,password):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.login = login
+        self.password = password
+    def verificar():
+        pass
+
+def nuevo_usuario(nom,ape,log,pas):
+    u = Usuario(nom,ape,log,pas)
+    usuarios.append(u)
+    guardar()
+
+def filtra_usuario_por_nombre(nombre):
+    resultado = []
+    print("largo->" + str(len(usuarios)))
+    for aux in usuarios:
+        print("avanzo")
+        print("nombre:" + nombre + "in auxnom:"+ aux.nombre)
+        if nombre in aux.nombre:
+            print("encontre uno")
+            resultado.append(aux)
+    return resultado
+
+def guardar():
+    arch=open("usuario.dat",'w')
+    for aux in usuarios:
+        arch.write(aux.nombre+"#"+ aux.apellido+"#"+ aux.login+"#"+ aux.password+ "\n")
+    arch.close()
+
+
+def inicializar():
+    arch=open("usuario.dat",'w')
+    for line in arch:
+        p=linea[:-1].split("#")
+        usuarios.append(Usuario(p[0],p[1],p[2],p[3]))
+    arch.close()
+    
+def inicializar_old():
+    #usuarios = []
+    usuarios[:] = []
+    u1 = Usuario('juan','peluche','juancho','j123')
+    usuarios.append(u1)
+
+    usuarios.append(Usuario('juan','arispe','juani','12345'))
+    usuarios.append(Usuario('ana','chalupa','ani','ani123'))
+    usuarios.append(Usuario('manolo','quito','loqui','lo113'))
+    usuarios.append(Usuario('archi','val','arva','a123'))
+    print("entre a inicializar")
+    print("largo en inicializar->" + str(len(usuarios)))
+    
+            
+

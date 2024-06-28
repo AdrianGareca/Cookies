@@ -1,0 +1,56 @@
+from bottle import route, run, request, redirect
+import datausuario
+
+@route('/', method='get')
+def inicio():
+
+    return '''<h1>Bienvenido</h1><hr>
+            <a href='/nuevo'>Nuevo usuario</a><br>
+            <a href='/buscar'>Buscar usuario</a>'''
+
+@route('/buscar')
+def buscar():
+    return '''
+        <form action="/buscar" method="post">
+            buscar: <input name="buscar" type="text" /><br>
+            <input value="enviar" type="submit" />
+        </form>
+    '''
+
+@route('/buscar', method='post')
+def buscar_post():
+    buscar = request.forms.get('buscar')
+    #print("buscar->" + buscar)
+    res = datausuario.filtra_usuario_por_nombre(buscar)
+    out = ''
+    for aux in res:
+        out = out + aux.nombre + ", " + aux.apellido + "<br>"
+    out = out + "<br><a href='/'>volver</a>"
+    return out
+    
+
+@route('/nuevo')
+def nuevo():
+    return '''
+        <form action="/nuevo" method="post">
+            Nombre: <input name="nombre" type="text" /><br>
+            Apellido: <input name="apellido" type="text" /><br>
+            Login: <input name="login" type="text" /><br>
+            Password: <input name="password" type="password" /><br>
+            <input value="enviar" type="submit" />
+        </form>
+    '''
+    
+@route('/nuevo', method='post')
+def recibir():
+    nombre = request.forms.get('nombre')
+    apellido = request.forms.get('apellido')
+    login = request.forms.get('login')
+    password = request.forms.get('password')
+    datausuario.nuevo_usuario(nombre,apellido,login,password)
+    return redirect('/')
+
+
+datausuario.inicializar()
+run(host='0.0.0.0', port=8080, debug=True)
+#run(host='0.0.0.0', port=8080, server="waitress")

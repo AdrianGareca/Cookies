@@ -1,16 +1,25 @@
 usuarios = []
+import random
 
 class Usuario:
-    def __init__(self, nombre,apellido,login,password):
+    def __init__(self, nombre,apellido,login,password,sesion):
         self.nombre = nombre
         self.apellido = apellido
         self.login = login
         self.password = password
+        self.sesion=sesion
     def verificar():
         pass
 
+
+def autentifica(log.pas):
+    for aux in usuarios:
+        if aux.login==log and aux.password=pas:
+            return aux
+        return None
+
 def nuevo_usuario(nom,ape,log,pas):
-    u = Usuario(nom,ape,log,pas)
+    u = Usuario(nom,ape,log,pas,-1)
     usuarios.append(u)
     guardar()
 
@@ -28,29 +37,14 @@ def filtra_usuario_por_nombre(nombre):
 def guardar():
     arch=open("usuario.dat",'w')
     for aux in usuarios:
-        arch.write(aux.nombre+"#"+ aux.apellido+"#"+ aux.login+"#"+ aux.password+ "\n")
+        arch.write(aux.nombre+"#"+ aux.apellido+"#"+ aux.login+"#"+ aux.password+"#"+aux.sesion+ "\n")
     arch.close()
 
 
 def inicializar():
-    arch=open("usuario.dat",'w')
+    arch=open("usuario.dat",'r')
     for line in arch:
         p=linea[:-1].split("#")
-        usuarios.append(Usuario(p[0],p[1],p[2],p[3]))
+        usuarios.append(Usuario(p[0],p[1],p[2],p[3],p[4]))
     arch.close()
-    
-def inicializar_old():
-    #usuarios = []
-    usuarios[:] = []
-    u1 = Usuario('juan','peluche','juancho','j123')
-    usuarios.append(u1)
-
-    usuarios.append(Usuario('juan','arispe','juani','12345'))
-    usuarios.append(Usuario('ana','chalupa','ani','ani123'))
-    usuarios.append(Usuario('manolo','quito','loqui','lo113'))
-    usuarios.append(Usuario('archi','val','arva','a123'))
-    print("entre a inicializar")
-    print("largo en inicializar->" + str(len(usuarios)))
-    
-            
-
+                

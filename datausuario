@@ -7,19 +7,27 @@ class Usuario:
         self.apellido = apellido
         self.login = login
         self.password = password
-        self.sesion=sesion
+        self.sesion=str(sesion)
     def verificar():
         pass
 
 
-def autentifica(log.pas):
+def autentifica(log,pas):
     for aux in usuarios:
-        if aux.login==log and aux.password=pas:
+        if aux.login==log and aux.password==pas:
+            return aux
+        return None
+
+    
+def buscar_por_sesion(s):
+    s=str(s)
+    for aux in usuarios:
+        if aux.sesion==s:
             return aux
         return None
 
 def nuevo_usuario(nom,ape,log,pas):
-    u = Usuario(nom,ape,log,pas,-1)
+    u = Usuario(nom,ape,log,pas,str(-1))
     usuarios.append(u)
     guardar()
 
@@ -37,14 +45,14 @@ def filtra_usuario_por_nombre(nombre):
 def guardar():
     arch=open("usuario.dat",'w')
     for aux in usuarios:
-        arch.write(aux.nombre+"#"+ aux.apellido+"#"+ aux.login+"#"+ aux.password+"#"+aux.sesion+ "\n")
+        arch.write(aux.nombre+"#"+ aux.apellido+"#"+ aux.login+"#"+ aux.password+"#"+str(aux.sesion)+ "\n")
     arch.close()
 
 
 def inicializar():
     arch=open("usuario.dat",'r')
-    for line in arch:
+    for linea in arch:
         p=linea[:-1].split("#")
         usuarios.append(Usuario(p[0],p[1],p[2],p[3],p[4]))
     arch.close()
-                
+

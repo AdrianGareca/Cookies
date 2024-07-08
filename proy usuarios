@@ -1,11 +1,16 @@
-from bottle import route, run, request, redirect
+from bottle import route, run, request, redirect, response 
 import datausuario
 import random
 
 @route('/', method='get')
 def inicio():
-
-    return '''<h1>Bienvenido</h1><hr>
+    s=request.get_cookie("poo")
+    u=traer_nombre_por_sesion(str(s))
+    if u:
+        return '''<h1>Bienvenido '''+u.nombre+'''</b><br>
+                <a href='/salir>Cerrar Sesion</a>'''
+    else:
+        return '''<h1>Bienvenido</h1><hr>
         <form action="/" method="post">
             Username: <input name="login" type="text" /><br>
             Password: <input name="password" type="password" /><br>
@@ -14,15 +19,37 @@ def inicio():
         <a href='/nuevo'>Nuevo usuario</a><br>
         <a href='/buscar'>Buscar usuario</a>'''
 
+def traer_nombre_por_sesion(s):
+    if s:
+        usr=datausuario.buscar_por_sesion(s)
+        return usr
+    else:
+        return None
+
+
+@route('/salir')
+def desloguear():
+    s=request.get_cookie("poo")
+    u=traer_nombre_por_sesion(s)
+    if u:
+        u.sesion=str(int(random.random()*1000))
+        datausuario.guardar()
+    return redirect
+    
+
 @route('/', method='post')
 def loguear():
     login=request.forms.get('login')
     password=request.forms.get('password')
-    usr=datausuario.autentifica(login.password)
+    usr=datausuario.autentifica(login,password)
     if usr:
-        s=int(random.random()*1000000)
+        s=str(int(random.random()*1000000))
         response.set_cookie("poo",s)
-        aux.sesion=s
+        usr.sesion=s
+        datausuario.guardar()
+        return redirect('/')
+    else:
+        return "No hay tal. <br><a href='/'>volver</a>"
 
 
 
@@ -72,3 +99,4 @@ def recibir():
 datausuario.inicializar()
 run(host='0.0.0.0', port=8080, debug=True)
 #run(host='0.0.0.0', port=8080, server="waitress")
+
